@@ -28,7 +28,10 @@ class RemoteDataSourceImplem implements RemoteDataSource {
 
     if (response.statusCode == 200) {
       final List decodedJson = json.decode(response.body) as List;
-      throw Exception();
+      List<PostsModel> posts = decodedJson
+          .map<PostsModel>((postModel) => PostsModel.fromJson(postModel))
+          .toList();
+      return posts;
     } else {
       throw ServerException();
     }
