@@ -1,11 +1,12 @@
 import 'package:clean_arch_posts_app/Core/Theme/theme.dart';
 import 'package:clean_arch_posts_app/Core/Widgets/error_widget.dart';
 import 'package:clean_arch_posts_app/Core/Widgets/loading_widget.dart';
-import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/bloc/posts_bloc.dart';
-import 'package:clean_arch_posts_app/Features/Post/Presentation/Widgets/post_item.dart';
-import 'package:clean_arch_posts_app/service_locator.dart';
+import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/PostsBloc/posts_bloc.dart';
+import 'package:clean_arch_posts_app/Features/Post/Presentation/Widgets/PostPageWidgets/post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'add_and_update_page.dart';
 
 class PostPage extends StatelessWidget {
   const PostPage({super.key});
@@ -23,7 +24,11 @@ class PostPage extends StatelessWidget {
       body: const PostsBuilder(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
-        onPressed: () {},
+        onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>  AddAndUpgatePage(isUpdate: false),
+        ));
+        },
         child: const Icon(Icons.add),
       ),
     );

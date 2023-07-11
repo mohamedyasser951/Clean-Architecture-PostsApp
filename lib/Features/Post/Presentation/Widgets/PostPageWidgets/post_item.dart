@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:clean_arch_posts_app/Features/Post/Domain/Entities/post_entity.dart';
 
 class PostItem extends StatelessWidget {
@@ -11,12 +10,17 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  ListTile(
-      leading: CircleAvatar(
-        child: Text(post.id.toString()),
+    return InkWell(
+      onTap: () {
+      
+      },
+      child: ListTile(
+        leading: CircleAvatar(
+          child: Text(post.id.toString()),
+        ),
+        title: Text(post.title),
+        subtitle: Text(post.body),
       ),
-      title: Text(post.title),
-      subtitle: Text(post.body),
     );
   }
 }

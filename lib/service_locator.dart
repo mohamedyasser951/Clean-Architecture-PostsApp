@@ -7,11 +7,12 @@ import 'package:clean_arch_posts_app/Features/Post/Domain/UseCase/add_post.dart'
 import 'package:clean_arch_posts_app/Features/Post/Domain/UseCase/delet_post.dart';
 import 'package:clean_arch_posts_app/Features/Post/Domain/UseCase/get_all_posts.dart';
 import 'package:clean_arch_posts_app/Features/Post/Domain/UseCase/update_post.dart';
-import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/bloc/posts_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
+import 'Features/Post/Presentation/Bloc/PostsBloc/posts_bloc.dart';
 
 GetIt sl = GetIt.instance;
 

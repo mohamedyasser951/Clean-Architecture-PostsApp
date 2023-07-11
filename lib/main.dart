@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:clean_arch_posts_app/Core/Theme/theme.dart';
-import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/bloc/posts_bloc.dart';
 import 'package:clean_arch_posts_app/Features/Post/Presentation/Screens/post_page.dart';
 
+import 'Features/Post/Presentation/Bloc/PostsBloc/posts_bloc.dart';
 import 'service_locator.dart' as ServiceLocator;
 
 void main() async {
