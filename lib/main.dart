@@ -6,11 +6,11 @@ import 'package:clean_arch_posts_app/Core/Theme/theme.dart';
 import 'package:clean_arch_posts_app/Features/Post/Presentation/Screens/post_page.dart';
 
 import 'Features/Post/Presentation/Bloc/PostsBloc/posts_bloc.dart';
-import 'service_locator.dart' as ServiceLocator;
+import 'service_locator.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ServiceLocator.init();
+  await di.init();
   runApp(const App());
 }
 
@@ -25,10 +25,10 @@ class App extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) =>
-                ServiceLocator.sl<PostsBloc>()..add(GetAllPostsEvent()),
+                di.sl<PostsBloc>()..add(GetAllPostsEvent()),
           ),
           BlocProvider(
-            create: (context) => ServiceLocator.sl<AddUpdateDeletePostBloc>(),
+            create: (context) => di.sl<AddUpdateDeletePostBloc>(),
           ),
         ],
         child: MaterialApp(

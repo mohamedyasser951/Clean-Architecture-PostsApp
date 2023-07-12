@@ -28,6 +28,16 @@ class AddUpdateDeletePostBloc
         final failureOrDoneMessage = await addPost(event.post);
         emit(mapFailureOrDoneMessageToState(
             failureOrDoneMessage, ADD_SUCCESS_MESSAGE));
+      } else if (event is UpdatePostEvent) {
+        emit(AddUpdateDeletePostLoadingState());
+        final failureOrDoneMessage = await updatePost(event.post);
+        emit(mapFailureOrDoneMessageToState(
+            failureOrDoneMessage, UPDATE_SUCCESS_MESSAGE));
+      } else if (event is DeletePostEvent) {
+        emit(AddUpdateDeletePostLoadingState());
+        final failureOrDoneMessage = await deletePost(event.postId);
+        emit(mapFailureOrDoneMessageToState(
+            failureOrDoneMessage, DELETE_SUCCESS_MESSAGE));
       }
     });
   }

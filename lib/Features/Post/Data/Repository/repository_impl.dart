@@ -8,6 +8,8 @@ import 'package:clean_arch_posts_app/Features/Post/Data/DataSource/remote_data_s
 import 'package:clean_arch_posts_app/Features/Post/Domain/Entities/post_entity.dart';
 import 'package:clean_arch_posts_app/Features/Post/Domain/Repository/posts_repo.dart';
 
+typedef DeleteOrUpdateOrAddPost = Future<Unit> Function();
+
 class PostsRepositoryImplem implements PostsRepository {
   RemoteDataSource remoteDataSourcel;
   LocaleDataSource localeDataSource;
@@ -43,27 +45,39 @@ class PostsRepositoryImplem implements PostsRepository {
       {required PostEntity postEntity}) async {
     PostsModel postsModel = PostsModel(
         id: postEntity.id, title: postEntity.title, body: postEntity.body);
+    return await getMessage(() {
+      return remoteDataSourcel.addPost(postsModel);
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> updatePost(
+      {required PostEntity postEntity}) async {
+    PostsModel postsModel = PostsModel(
+        id: postEntity.id, title: postEntity.title, body: postEntity.title);
+    return await getMessage(() {
+      return remoteDataSourcel.updatePost(postsModel);
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deletePost({required int postId}) async {
+    return await getMessage(() {
+      return remoteDataSourcel.deletePost(postId);
+    });
+  }
+
+  Future<Either<Failure, Unit>> getMessage(
+      DeleteOrUpdateOrAddPost addOrUpdateOrDeleteFunction) async {
     if (await networkInfo.isConnected) {
       try {
-        remoteDataSourcel.addPost(postsModel);
+        await addOrUpdateOrDeleteFunction();
         return const Right(unit);
-      } on OfflineException {
-        return Left(OffLineFailure());
+      } on ServerException {
+        return Left(ServerFailure());
       }
     } else {
-      return Left(ServerFailure());
+      return Left(OffLineFailure());
     }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> deletePost({required int postId}) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Unit>> updatePost({required PostEntity postEntity}) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
   }
 }

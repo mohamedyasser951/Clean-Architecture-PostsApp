@@ -5,22 +5,19 @@ import 'package:clean_arch_posts_app/Features/Post/Presentation/Widgets/AddUpdat
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
 class FormWidgets extends StatefulWidget {
   final PostEntity? post;
   final bool isUpdate;
 
-
-
   const FormWidgets({super.key, this.post, required this.isUpdate});
-
-  
 
   @override
   State<FormWidgets> createState() => _FormWidgetsState();
 }
 
 class _FormWidgetsState extends State<FormWidgets> {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController titleController = TextEditingController();
 
@@ -49,7 +46,7 @@ class _FormWidgetsState extends State<FormWidgets> {
                 CustomeTxetField(
                     text: "title",
                     isMultiLine: false,
-                    controller:titleController),
+                    controller: titleController),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -83,16 +80,16 @@ class _FormWidgetsState extends State<FormWidgets> {
     );
   }
 
-
   void validateAndAddOrUpdatePost() {
     bool isValidate = formKey.currentState!.validate();
     PostEntity post = PostEntity(
-        id:widget.isUpdate ? widget.post!.id : null,
-
+        id: widget.isUpdate ? widget.post!.id : null,
         title: titleController.text,
-        body:bodyController.text);
+        body: bodyController.text);
     if (isValidate) {
       if (widget.isUpdate) {
+        BlocProvider.of<AddUpdateDeletePostBloc>(context)
+            .add(UpdatePostEvent(post: post));
       } else {
         BlocProvider.of<AddUpdateDeletePostBloc>(context)
             .add(AddPostEvent(post: post));
@@ -100,6 +97,3 @@ class _FormWidgetsState extends State<FormWidgets> {
     }
   }
 }
-  
-
-

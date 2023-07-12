@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DeleteWidget extends StatelessWidget {
-  const DeleteWidget({super.key});
+import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/AddUpdateDeletePostBloc/add_update_delete_post_bloc.dart';
+
+class DeleteDialogWidget extends StatelessWidget {
+  final int postId;
+
+
+  const DeleteDialogWidget({
+    Key? key,
+    required this.postId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-        style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
-        onPressed: () {},
-        icon: const Icon(Icons.delete_outlined),
-        label: const Text("Delete"));
+    return AlertDialog(
+      title: const Text("Are you Sure ?"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text(
+            "No",
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            BlocProvider.of<AddUpdateDeletePostBloc>(context).add(
+              DeletePostEvent(postId: postId),
+            );
+          },
+          child: const Text("Yes"),
+        ),
+      ],
+    );
   }
-
-  // void showDeleteDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) =>null,
-  //   );
-  // }
 }

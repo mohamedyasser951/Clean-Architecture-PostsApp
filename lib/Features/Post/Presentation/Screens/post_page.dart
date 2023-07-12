@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:clean_arch_posts_app/Core/Theme/theme.dart';
 import 'package:clean_arch_posts_app/Core/Widgets/error_widget.dart';
 import 'package:clean_arch_posts_app/Core/Widgets/loading_widget.dart';
+import 'package:clean_arch_posts_app/Features/Post/Domain/Entities/post_entity.dart';
 import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/PostsBloc/posts_bloc.dart';
 import 'package:clean_arch_posts_app/Features/Post/Presentation/Widgets/PostPageWidgets/post_item.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'add_and_update_page.dart';
 
@@ -21,13 +23,13 @@ class PostPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: const PostsBuilder(),
+      body: const PostsPageBody(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>const  AddAndUpgatePage(isUpdate: false),
-        ));
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const AddAndUpgatePage(isUpdate: false),
+          ));
         },
         child: const Icon(Icons.add),
       ),
@@ -35,8 +37,8 @@ class PostPage extends StatelessWidget {
   }
 }
 
-class PostsBuilder extends StatelessWidget {
-  const PostsBuilder({super.key});
+class PostsPageBody extends StatelessWidget {
+  const PostsPageBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +51,34 @@ class PostsBuilder extends StatelessWidget {
             errorMessage: state.errorMessage,
           );
         } else if (state is GetAllPostsLoadedState) {
-          return RefreshIndicator(
-            onRefresh: () async{
-              BlocProvider.of<PostsBloc>(context).add(RefreshPostsEvent());
-            },
-            child: ListView.separated(
-              itemCount: state.posts.length,
-              itemBuilder: (context, index) =>
-                  PostItem(post: state.posts[index]),
-              separatorBuilder: (context, index) => const Divider(),
-            ),
+          return PostsBuilder(
+            posts: state.posts,
           );
         }
         return const LoadingWidget();
       },
+    );
+  }
+}
+
+class PostsBuilder extends StatelessWidget {
+  final List<PostEntity> posts;
+  const PostsBuilder({
+    Key? key,
+    required this.posts,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        BlocProvider.of<PostsBloc>(context).add(RefreshPostsEvent());
+      },
+      child: ListView.separated(
+        itemCount: posts.length,
+        itemBuilder: (context, index) => PostItem(post: posts[index]),
+        separatorBuilder: (context, index) => const Divider(),
+      ),
     );
   }
 }

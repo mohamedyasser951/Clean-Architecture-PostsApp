@@ -48,14 +48,28 @@ class RemoteDataSourceImplem implements RemoteDataSource {
   }
 
   @override
-  Future<Unit> deletePost(int postId) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<Unit> updatePost(PostsModel postsModel) async {
+    final postId = postsModel.id;
+    final body = {"title": postsModel.title, "body": postsModel.body};
+    final response =
+        await client.patch(Uri.parse("$basicUrl/posts/$postId"), body: body);
+    if (response.statusCode == 200) {
+      return Future.value(unit);
+    } else {
+      throw ServerException();
+    }
   }
 
   @override
-  Future<Unit> updatePost(PostsModel postsModel) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
+  Future<Unit> deletePost(int postId) async {
+    final response = await client.delete(
+      Uri.parse("$basicUrl/posts/$postId"),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (response.statusCode == 200) {
+      return Future.value(unit);
+    } else {
+      throw (ServerException());
+    }
   }
 }

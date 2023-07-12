@@ -27,7 +27,7 @@ class UpdatePostEvent extends AddUpdateDeletePostEvent {
 }
 
 class DeletePostEvent extends AddUpdateDeletePostEvent {
-  final String postId;
+  final int postId;
   const DeletePostEvent({
     required this.postId,
   });
