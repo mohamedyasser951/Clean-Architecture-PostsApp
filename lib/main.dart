@@ -1,3 +1,4 @@
+import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/AddUpdateDeletePostBloc/add_update_delete_post_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,7 +26,10 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 ServiceLocator.sl<PostsBloc>()..add(GetAllPostsEvent()),
-          )
+          ),
+          BlocProvider(
+            create: (context) => ServiceLocator.sl<AddUpdateDeletePostBloc>(),
+          ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

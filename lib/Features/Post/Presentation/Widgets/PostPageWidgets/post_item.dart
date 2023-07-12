@@ -1,3 +1,4 @@
+import 'package:clean_arch_posts_app/Features/Post/Presentation/Screens/post_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch_posts_app/Features/Post/Domain/Entities/post_entity.dart';
 
@@ -10,17 +11,19 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-      
-      },
-      child: ListTile(
-        leading: CircleAvatar(
-          child: Text(post.id.toString()),
-        ),
-        title: Text(post.title),
-        subtitle: Text(post.body),
+    return ListTile(
+      leading: CircleAvatar(
+        child: Text(post.id.toString()),
       ),
+      title: Text(post.title),
+      subtitle: Text(post.body),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PostsDetailsPage(post: post),
+            ));
+      },
     );
   }
 }

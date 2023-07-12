@@ -26,7 +26,7 @@ class PostPage extends StatelessWidget {
         backgroundColor: primaryColor,
         onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>  AddAndUpgatePage(isUpdate: false),
+          builder: (context) =>const  AddAndUpgatePage(isUpdate: false),
         ));
         },
         child: const Icon(Icons.add),

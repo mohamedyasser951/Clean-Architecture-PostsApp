@@ -7,6 +7,7 @@ import 'package:clean_arch_posts_app/Features/Post/Domain/UseCase/add_post.dart'
 import 'package:clean_arch_posts_app/Features/Post/Domain/UseCase/delet_post.dart';
 import 'package:clean_arch_posts_app/Features/Post/Domain/UseCase/get_all_posts.dart';
 import 'package:clean_arch_posts_app/Features/Post/Domain/UseCase/update_post.dart';
+import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/AddUpdateDeletePostBloc/add_update_delete_post_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +21,9 @@ Future<void> init() async {
   //BLOCS
   sl.registerFactory<PostsBloc>(() => PostsBloc(getAllPostsUseCase: sl()));
 
+  sl.registerFactory(() => AddUpdateDeletePostBloc(
+      addPost: sl(), updatePost: sl(), deletePost: sl()));
+      
   //Repositories
   sl.registerLazySingleton<PostsRepository>(() => PostsRepositoryImplem(
       remoteDataSourcel: sl(), localeDataSource: sl(), networkInfo: sl()));

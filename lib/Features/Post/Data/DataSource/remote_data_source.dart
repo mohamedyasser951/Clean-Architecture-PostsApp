@@ -38,9 +38,13 @@ class RemoteDataSourceImplem implements RemoteDataSource {
   }
 
   @override
-  Future<Unit> addPost(PostsModel postsModel) {
-    // TODO: implement addPost
-    throw UnimplementedError();
+  Future<Unit> addPost(PostsModel postsModel) async {
+    final response = await client.post(Uri.parse("$basicUrl/posts"));
+    if (response.statusCode == 201) {
+      return Future.value(unit);
+    } else {
+      throw ServerException();
+    }
   }
 
   @override

@@ -1,10 +1,13 @@
-import 'package:clean_arch_posts_app/Core/Theme/theme.dart';
-import 'package:clean_arch_posts_app/Features/Post/Presentation/Widgets/AddUpdatePageWidgets/cutome_text_field.dart';
+import 'package:clean_arch_posts_app/Core/Utils/snack_bar_widget.dart';
+import 'package:clean_arch_posts_app/Core/Widgets/loading_widget.dart';
+import 'package:clean_arch_posts_app/Features/Post/Presentation/Bloc/AddUpdateDeletePostBloc/add_update_delete_post_bloc.dart';
+import 'package:clean_arch_posts_app/Features/Post/Presentation/Widgets/AddUpdatePageWidgets/form_widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'package:clean_arch_posts_app/Features/Post/Domain/Entities/post_entity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddAndUpgatePage extends StatefulWidget {
+class AddAndUpgatePage extends StatelessWidget {
   final PostEntity? post;
   final bool isUpdate;
 
@@ -15,75 +18,30 @@ class AddAndUpgatePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AddAndUpgatePage> createState() => _AddAndUpgatePageState();
-}
-
-class _AddAndUpgatePageState extends State<AddAndUpgatePage> {
-  final TextEditingController titleController = TextEditingController();
-
-  final TextEditingController bodyController = TextEditingController();
-
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    if (widget.isUpdate) {
-      titleController.text = widget.post!.title;
-      bodyController.text = widget.post!.body;
-    }
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.isUpdate ? "Edit Post" : "Post Details"),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CustomeTxetField(
-                      text: "title",
-                      isMultiLine: false,
-                      controller: titleController),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  CustomeTxetField(
-                      text: "body",
-                      isMultiLine: true,
-                      controller: bodyController),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  ElevatedButton.icon(
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(primaryColor),
-                      ),
-                      onPressed: () {},
-                      icon: Icon(
-                        widget.isUpdate ? Icons.edit : Icons.add,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        widget.isUpdate ? "Update" : "Add",
-                        style: const TextStyle(color: Colors.white),
-                      )),
-                ],
-              ),
-            ),
-          ),
+        appBar: AppBar(
+          title: Text(isUpdate ? "Edit Post" : "Post Details"),
+          centerTitle: true,
         ),
-      ),
-    );
+        body: BlocConsumer<AddUpdateDeletePostBloc, AddUpdateDeletePostState>(
+          listener: (context, state) {
+            if (state is AddUpdateDeletePostErrorState) {
+              snackBarWidget(context, state.message, Colors.red);
+            } else if (state is AddUpdateDeletePostSuccessMessageState) {
+              snackBarWidget(context, state.message, Colors.green);
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, state) {
+            if (state is AddUpdateDeletePostLoadingState) {
+              return const LoadingWidget();
+            }
+            return FormWidgets(
+              isUpdate: isUpdate,
+              post: isUpdate ? post : null,
+            );
+          },
+        ));
   }
 }
